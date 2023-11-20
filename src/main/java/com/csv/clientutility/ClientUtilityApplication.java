@@ -2,6 +2,7 @@ package com.csv.clientutility;
 
 import com.csv.clientutility.domain.model.Person;
 import com.csv.clientutility.filter.*;
+import com.csv.clientutility.sorting.*;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
@@ -33,27 +34,7 @@ public class ClientUtilityApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		/*
-		 * Usage: java -jar ClientUtilityApplication.jar --in <input_path> --out <output_path> [--only-men true] [--top 5] [--last 1]
-		 *
-		 * Options:
-		 *   --in <input_path>        Specify the input CSV file or folder path.
-		 *   --out <output_path>      Specify the output folder path for the processed data.
-		 *   --only-men true          Apply filter to include only male persons.
-		 *   --females-only true      Apply filter to include only female persons.
-		 *   --top <n>                Show only the top n persons based on sorting criteria.
-		 *   --last <n>               Show only the last n persons based on sorting criteria.
-		 *   --birth-date-desc        Sort persons by birth date in descending order.
-		 *   --last-name-asc          Sort persons by last name in ascending order.
-		 *   --last-name-desc         Sort persons by last name in descending order.
-		 *   --first-name-asc         Sort persons by first name in ascending order.
-		 *   --first-name-desc        Sort persons by first name in descending order.
-		 *
-		 * Note:
-		 *   - Filters for gender (--only-men and --females-only) should be applied before sorting and other filters
-		 *     to ensure correct results.
-		 */
-		// Ensure that --in and --out are provided
+
 		if (!containsArgument(args, "--in") || !containsArgument(args, "--out")) {
 			throw new IllegalArgumentException("Usage: java -jar ClientUtilityApplication.jar --in <input_path> --out <output_path> [--only-men true] [--top 5] [--last 1]");
 		}
@@ -75,8 +56,7 @@ public class ClientUtilityApplication implements CommandLineRunner {
 		int lastN = getIntArgumentValue(args, "--last", 0);
 
 		List<Person> persons = loadPersonsFromCSV(inputFilePath);
-		// TODO: подумать над структурой хранения сортировок и фильтров
-		// Sorting and filtering configurations
+
 		PersonSortingStrategy sortingStrategy = new BirthDateAscending();
 
 
@@ -125,17 +105,12 @@ public class ClientUtilityApplication implements CommandLineRunner {
 		}
 
 
-		// Create a PersonSorter with the specified configurations
 		PersonSorter sorter = new PersonSorter(sortingStrategy, preFilters, postFilters);
 
-		// Sort and filter the list
 		List<Person> sortedList = sorter.sorted(persons);
 
-		// Validate and process the sorted list
 		processSortedPersons(sortedList, outputFolderPath);
 	}
-
-	// Helper methods for argument parsing
 
 	private boolean containsArgument(String[] args, String argName) {
 		return Arrays.asList(args).contains(argName);
@@ -183,27 +158,22 @@ public class ClientUtilityApplication implements CommandLineRunner {
 			}
 		}
 
-		// Print and log the valid persons
 		System.out.println("Valid Persons:");
 		for (int i = 0; i < validPersons.size(); i++) {
 			Person person = validPersons.get(i);
 			System.out.println((i + 1) + "\n" + person);
 		}
 
-		// Save the valid persons to the output CSV file
 		savePersonsToCSV(validPersons, outputFolderPath);
 
 	}
 
 
 	private void logInvalidPerson(Person person) {
-		// Choose the folder for the log file
 		String logFolderPath = "/home/marialavrenova/IdeaProjects/ClientUtility/src/main/resources/logs"; // Update this path
 
-		// Print debug information
 		System.out.println("Log Folder Path: " + logFolderPath);
 
-		// Create the log folder if it doesn't exist
 		try {
 			Path logFolder = Paths.get(logFolderPath);
 			if (!logFolder.toFile().exists()) {
@@ -213,18 +183,16 @@ public class ClientUtilityApplication implements CommandLineRunner {
 			System.out.println("Log Folder Path: " + logFolderPath);
 			System.out.println("Log entry written successfully.");
 
-			// Write logs to a file
 			try (FileWriter logFileWriter = new FileWriter(Paths.get(logFolderPath, "log.txt").toString(), true)) {
 				logFileWriter.write("Invalid person entry: " + person + "\n");
 				System.out.println("Log entry written successfully.");
 			} catch (IOException e) {
-				// Handle IOException, e.g., log an error
 				logger.error("Error writing to log file", e);
 			}
 
 			logger.error("Invalid person entry: {}", person);
 		} catch (IOException e) {
-			// Handle IOException, e.g., log an error
+
 			logger.error("Error creating log folder: {}", e.getMessage());
 		}
 	}

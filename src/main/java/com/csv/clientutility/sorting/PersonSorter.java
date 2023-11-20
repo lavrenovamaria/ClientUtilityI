@@ -1,9 +1,11 @@
 // PersonSorter.java
-package com.csv.clientutility.filter;
+package com.csv.clientutility.sorting;
 
 import com.csv.clientutility.domain.model.Person;
+import com.csv.clientutility.filter.Filter;
+import com.csv.clientutility.filter.PostFilter;
+import com.csv.clientutility.filter.PreFilter;
 
-import java.util.Comparator;
 import java.util.List;
 
 public class PersonSorter {

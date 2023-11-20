@@ -1,6 +1,7 @@
-package com.csv.clientutility.filter;
+package com.csv.clientutility.sorting;
 
 import com.csv.clientutility.domain.model.Person;
+import com.csv.clientutility.filter.Filter;
 
 import java.time.LocalDate;
 import java.util.Comparator;

@@ -1,14 +1,15 @@
-package com.csv.clientutility.filter;
+package com.csv.clientutility.sorting;
 
 import com.csv.clientutility.domain.model.Person;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class BirthDateAscending implements PersonSortingStrategy {
+public class LastNameAscending implements PersonSortingStrategy {
     @Override
     public List<Person> sorted(List<Person> collection) {
-        collection.sort(Comparator.comparing(Person::getBirthdate));
+        collection.sort(Comparator.comparing(Person::getLastName));
         return collection;
     }
+
 }

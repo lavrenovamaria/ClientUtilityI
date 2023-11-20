@@ -1,4 +1,4 @@
-package com.csv.clientutility.filter;
+package com.csv.clientutility.sorting;
 
 import com.csv.clientutility.domain.model.Person;
 
