@@ -170,7 +170,7 @@ public class ClientUtilityApplication implements CommandLineRunner {
 
 
 	private void logInvalidPerson(Person person) {
-		String logFolderPath = "/home/marialavrenova/IdeaProjects/ClientUtility/src/main/resources/logs"; // Update this path
+		String logFolderPath = "src/main/resources/logs"; // Update this path
 
 		System.out.println("Log Folder Path: " + logFolderPath);
 
