@@ -148,7 +148,6 @@ public class ClientUtilityApplication implements CommandLineRunner {
 		List<Person> validPersons = new ArrayList<>();
 		List<Person> invalidPersons = new ArrayList<>();
 
-		// Validate each person using the PersonBirthdateValidator
 		for (Person person : sortedList) {
 			if (personValidator.isValidPerson(person)) {
 				validPersons.add(person);
@@ -170,7 +169,7 @@ public class ClientUtilityApplication implements CommandLineRunner {
 
 
 	private void logInvalidPerson(Person person) {
-		String logFolderPath = "src/main/resources/logs"; // Update this path
+		String logFolderPath = "src/main/resources/logs";
 
 		System.out.println("Log Folder Path: " + logFolderPath);
 
@@ -201,48 +200,41 @@ public class ClientUtilityApplication implements CommandLineRunner {
 		List<Person> persons = new ArrayList<>();
 
 		try {
-			// List all files in the folder
 			File folder = new File(folderPath);
 			File[] files = folder.listFiles();
 
 			if (files != null) {
 				for (File file : files) {
-					// Process only CSV files
 					if (file.isFile() && file.getName().toLowerCase().endsWith(".csv")) {
 						try (CSVReader reader = new CSVReader(new FileReader(file))) {
 							String[] nextRecord;
-							reader.readNext(); // Skip the header row
+							reader.readNext();
 
 							while ((nextRecord = reader.readNext()) != null) {
-								// Parse and process the data here
 								String firstName = nextRecord[0];
 								String lastName = nextRecord[1];
 								String gender = nextRecord[2];
 
 								try {
-									// Extract year, day, and month from the date string
 									int year = Integer.parseInt(nextRecord[3].substring(0, 4));
 									int month = Integer.parseInt(nextRecord[3].substring(5, 7));
 									int day = Integer.parseInt(nextRecord[3].substring(8, 10));
 
 									LocalDate birthdate = LocalDate.of(year, month, day);
-									// Create a Person object and add it to the list
+
 									Person person = new Person(firstName, lastName, gender, birthdate);
 									persons.add(person);
 								} catch (DateTimeException | NumberFormatException e) {
-									// Log or handle the exception if the date format is invalid or other issues
 									logger.error("Error processing entry in file {}: {}", file.getName(), Arrays.toString(nextRecord));
 								}
 							}
 						} catch (IOException | CsvValidationException e) {
-							// Handle exceptions appropriately
 							logger.error("Error reading CSV file {}: {}", file.getName(), e.getMessage());
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
-			// Handle exceptions appropriately
 			logger.error("Error listing files in folder {}: {}", folderPath, e.getMessage());
 		}
 
@@ -251,17 +243,14 @@ public class ClientUtilityApplication implements CommandLineRunner {
 
 	private static void savePersonsToCSV(List<Person> persons, String folderPath) {
 		try {
-			// Create the output folder if it doesn't exist
 			File outputFolder = new File(folderPath);
 			if (!outputFolder.exists()) {
 				outputFolder.mkdirs();
 			}
 
-			// Specify the output file name
 			String outputFileName = "output.csv";
 			String outputPath = Paths.get(folderPath, outputFileName).toString();
 
-			// Check if the file already exists, and delete it
 			File existingFile = new File(outputPath);
 			if (existingFile.exists()) {
 				existingFile.delete();
@@ -273,14 +262,13 @@ public class ClientUtilityApplication implements CommandLineRunner {
 							person.getFirstName(),
 							person.getLastName(),
 							String.valueOf(person.getGender()),
-							person.getBirthdate().toString() // Assuming ISO_LOCAL_DATE format
+							person.getBirthdate().toString()
 					};
 					csvWriter.writeNext(record);
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace(); // Print the stack trace
-			// Add additional logging or handle the exception as needed
+			e.printStackTrace();
 		}
 	}
 }
