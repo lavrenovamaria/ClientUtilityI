@@ -38,3 +38,4 @@ TODO:
 3. Tie-tie birthday
 4. Другие форматы файлов(JSON, XTML)
 5. Вынос из main всех классов, согласно принципам SOLID и GoF
+6. Нет документации JAVA DOC
