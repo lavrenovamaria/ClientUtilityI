@@ -26,11 +26,12 @@
 - Если встречается недопустимая дата, программа выдает исключение, указывающее конкретные записи с недопустимыми датами.
 
 Всё создано как sequence filters, т.е. у опциональных флагов возможны комбинации[--males-only true --top 5 --last 2] выведет списик всех мужчин, далее возьмёт первых 5 из списка и из 5-ти возьмёт 2 последних.
-1: --males-only true --females-only true -> all
+```
+1. --males-only true --females-only true -> all
 2. --males-only false --females-only true -> all females
 3. --males-only true --females-only false -> all males
 4. --males-only false --females-only false -> nobody
-
+```
 TODO:
 1. Не реализованы exceptions(+user-friendly messages)
 2. Unit tests
